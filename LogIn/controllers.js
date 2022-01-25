@@ -119,7 +119,7 @@ const isAdmin = async (req,res,next) => {
     if(result){
         console.log(result)
         if(result.isAdmin === true){
-            next();
+            next()
         }
     }
 }
