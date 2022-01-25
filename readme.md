@@ -29,3 +29,6 @@ en cada una de las carpetas.
    Recibe por headers "emailchek" (con el que se inició sesión) y "authorization" (Token), además
    puede recibir por body un email para buscar de manera no sensitiva. Devuelve un objeto con los
    datos para realizar paginación y un Array con los usuarios.
+   
+   Eliminar usuario http://localhost:3000/logIn/deleteUser
+   Recibe por body email y password y elimina el usuario.
