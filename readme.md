@@ -27,5 +27,5 @@ en cada una de las carpetas.
    
    Listar usuarios http://localhost:3000/logIn/listUsers
    Recibe por headers "emailchek" (con el que se inició sesión) y "authorization" (Token), además
-   puede recibir por body un email para buscar de manera no sensitiva.
-    
+   puede recibir por body un email para buscar de manera no sensitiva. Devuelve un objeto con los
+   datos para realizar paginación y un Array con los usuarios.
