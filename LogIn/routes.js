@@ -1,4 +1,4 @@
-const {logIn,addUser,listUsers,deleteUser} = require ("./controllers")
+const {logIn,addUser,listUsers,deleteUser,validarJWT,isAdmin} = require ("./controllers")
 const express = require ("express")
 
 
@@ -10,6 +10,6 @@ router.post("/addUser", addUser)
 
 router.post("/listUsers",listUsers)
 
-router.delete("/deleteUser",deleteUser)
+router.delete("/deleteUser",validarJWT,isAdmin,deleteUser)
 
 module.exports = router

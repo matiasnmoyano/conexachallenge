@@ -2,6 +2,7 @@ const mongoose = require ("mongoose")
 const User = require ('../modelUser')
 const jwt = require("jsonwebtoken")
 const Axios = require ('axios')
+const jwt_decode = require("jwt-decode")
 require ('dotenv').config()
 
 function generateAccessToken (user) {
@@ -13,7 +14,8 @@ const addUser = async (req,res) => {
     if(!check){
         let user = new User({
             email,
-            password
+            password,
+            isAdmin:true
         })
         user.save((err,user) => {
             err && res
@@ -34,7 +36,8 @@ const logIn = async (req,res) => {
     const {email,password} = req.body
     const user = {
         email,
-        password
+        password,
+        //isAdmin:true //para hacer admin un user
     }
     const result = await User.findOne(user)
     if(result){
@@ -95,5 +98,30 @@ const deleteUser = (req,res) => {
 
     })
 }
+const validarJWT =  async (req, res, next) => {
+    const {authorization,emailcheck} = req.headers;
+    let decoded = {};
+    if (authorization) {
+        decoded = await jwt_decode(authorization);
+    }
+    if (decoded.email === emailcheck && emailcheck !== undefined) {
+        req.user = decoded;
+        next();
+    } else {
+        return res
+        .status(401)
+        .send({message:"Usuario no autorizado"});
+    }  
+};
+const isAdmin = async (req,res,next) => {
+    const {emailcheck} = req.headers;
+    const result = await User.findOne({email:emailcheck})
+    if(result){
+        console.log(result)
+        if(result.isAdmin === true){
+            next();
+        }
+    }
+}
 
-module.exports = {addUser,logIn,listUsers,deleteUser}
+module.exports = {addUser,logIn,listUsers,deleteUser,validarJWT,isAdmin}
