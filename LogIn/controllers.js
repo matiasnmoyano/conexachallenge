@@ -21,12 +21,12 @@ const addUser = async (req,res) => {
             .send(err.message)
             res
             .status(200)
-            .send("Usuario cargado con éxito")
+            .send({message:"Usuario cargado con éxito"})
         })
     }else{
         res
         .status(400)
-        .send("El email ya está en uso")
+        .send({message:"El email ya está en uso"})
     }
 }
 
@@ -48,7 +48,7 @@ const logIn = async (req,res) => {
     else{
         res
         .status(400)
-        .send("Usuario no encontrado")
+        .send({message:"Usuario no encontrado"})
     }
 }
 
@@ -63,15 +63,37 @@ const listUsers =  (req,res) => {
             Axios.post("http://localhost:4000/businees/users",data)
             .then((result) => {
                     if(result.status === 200){
-                        res.status(200).send(result.data)
+                        res
+                        .status(200)
+                        .send(result.data)
                     }
             })
-            .catch((err) => {
-                res.status(401).send("Usuario no autorizado")
-                console.log("Usuario no autorizado")
+            .catch(() => {
+                res
+                .status(401)
+                .send({message:"Usuario no autorizado"})
             } )
         }
         
 }
 
-module.exports = {addUser,logIn,listUsers}
+const deleteUser = (req,res) => {
+    const {email,password} = req.body
+    User.findOneAndDelete({email,password},(err,user) => {
+        err && res
+            .status(500)
+            .send(err.message)
+        if(user){
+            res
+            .status(200)
+            .send({message:"Usuario eliminado con éxito",user})
+        }else{
+            res
+            .status(400)
+            .send({message:"Usuario no encontrado"})
+        }
+
+    })
+}
+
+module.exports = {addUser,logIn,listUsers,deleteUser}

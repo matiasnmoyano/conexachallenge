@@ -18,7 +18,7 @@ const validarJWT =  async (req, res, next) => {
         } else {
             return res
             .status(401)
-            .send("Usuario no autorizado");
+            .send({message:"Usuario no autorizado"});
         }  
 };
 const findAllUsers = async (req,res) => {
@@ -32,7 +32,7 @@ const findAllUsers = async (req,res) => {
             }else{
                 res
                 .status(500)
-                .send("Usuario no encontrado")
+                .send({message:"Usuario no encontrado"})
             }})
     } else{
         User.paginate({},options,(err,users) => {
